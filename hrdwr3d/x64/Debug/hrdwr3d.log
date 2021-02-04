@@ -1,0 +1,7 @@
+﻿  DirX.cpp
+  main.cpp
+  System.cpp
+  Window.cpp
+  Generating Code...
+MSVCRTD.lib(exe_main.obj) : error LNK2019: unresolved external symbol main referenced in function "int __cdecl invoke_main(void)" (?invoke_main@@YAHXZ)
+C:\Users\r_jones\Documents\Visual Studio 2017\Projects\hrdwr3d\x64\Debug\hrdwr3d.exe : fatal error LNK1120: 1 unresolved externals
