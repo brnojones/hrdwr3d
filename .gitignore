@@ -3,3 +3,13 @@
 ################################################################################
 
 /.vs/hrdwr3d/v15/Browse.VC.opendb
+*.log
+*.tlog
+*.obj
+*.ipch
+*.pdb
+*.ilk
+*.lastbuildstate
+*.idb
+
+
