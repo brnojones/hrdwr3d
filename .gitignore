@@ -11,5 +11,8 @@
 *.ilk
 *.lastbuildstate
 *.idb
+*.db
+*.suo
+
 
 
