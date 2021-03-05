@@ -199,12 +199,12 @@ bool DirX::InitPipeline()
 
 bool DirX::InitGraphics()
 {
-	Vertex vertices[] =
-	{
-		XMFLOAT3(0.0f, 0.5f, 1.0f),
-		XMFLOAT3(0.5f, -0.5f, 1.0f),
-		XMFLOAT3(-0.5f, -0.5f, 1.0f)
-	};
+//	Vertex vertices[] =
+//	{
+//		/*XMFLOAT3(0.0f, 0.5f, 1.0f),
+//		XMFLOAT3(0.5f, -0.5f, 1.0f),
+//		XMFLOAT3(-0.5f, -0.5f, 1.0f)*/
+//	};
 }
 
 bool DirX::LoadContent()
