@@ -209,17 +209,13 @@ bool DirX::InitGraphics()
 //		XMFLOAT3(-0.5f, -0.5f, 1.0f)*/
 //	};
 	
-	
-	int x = 0;
 }
 
 bool DirX::LoadContent()
 {
 	InitPipeline();
 	InitGraphics();
-
-	int y = 0;
-
+	
 	/*ID3DBlob* vsBuffer = 0;
 
 	bool compileResult = CompileShader("shader.fx", "VS_Main", "vs_4_0", &vsBuffer);
