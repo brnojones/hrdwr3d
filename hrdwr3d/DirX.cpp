@@ -205,6 +205,9 @@ bool DirX::InitGraphics()
 //		XMFLOAT3(0.5f, -0.5f, 1.0f),
 //		XMFLOAT3(-0.5f, -0.5f, 1.0f)*/
 //	};
+	
+	
+	int x = 0;
 }
 
 bool DirX::LoadContent()
