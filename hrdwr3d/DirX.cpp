@@ -5,6 +5,9 @@
 //{
 //	XMFLOAT3 pos;
 //};
+//
+//
+//
 
 DirX::DirX()
 {
