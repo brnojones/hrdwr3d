@@ -1,6 +1,5 @@
 
 #include "System.h"
-//#include "System.h"
 
 // windows entry point
 int WINAPI wWinMain(HINSTANCE hInstance,			// instance handle

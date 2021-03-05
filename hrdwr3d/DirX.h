@@ -9,6 +9,9 @@
 
 class DirX
 {
+	struct Colour { float R, G, B, A; };
+	struct Vertex { float X, Y, Z; Colour Colour; };
+
 public:
 	DirX();
 	~DirX();
@@ -36,4 +39,7 @@ private:
 	ID3D11Buffer* _vertexBuffer;
 
 	float _bufferColour[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
+
+	bool InitPipeline();
+	bool InitGraphics();
 };

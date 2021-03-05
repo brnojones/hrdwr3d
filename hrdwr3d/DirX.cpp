@@ -1,10 +1,10 @@
 
 #include "DirX.h"
-
-struct VertexPos
-{
-	XMFLOAT3 pos;
-};
+//
+//struct VertexPos
+//{
+//	XMFLOAT3 pos;
+//};
 
 DirX::DirX()
 {
@@ -113,10 +113,6 @@ bool DirX::Initialise(HWND* hwnd, int windowWidth, int windowHeight)
 	return LoadContent();
 }
 
-//#include <cstdlib>
-//#include <iostream>
-//#include <ctime>
-
 bool DirX::CompileShader(std::string filePath, std::string entry, std::string shaderModel, ID3DBlob** buffer)
 {
 	DWORD shaderFlags = 0;// D3DCOMPILE_ENABLE_STRICTNESS;
@@ -142,9 +138,81 @@ bool DirX::CompileShader(std::string filePath, std::string entry, std::string sh
 	return true;
 }
 
-bool DirX::LoadContent()
+bool DirX::InitPipeline()
 {
 	ID3DBlob* vsBuffer = 0;
+	ID3DBlob* psBuffer = 0;
+
+	//	Compile vertex and pixel shader
+	bool vsResult = CompileShader("shader.shader", "VS_Main", "vs_4_0", &vsBuffer);
+	bool psResult = CompileShader("shader.shader", "VS_Main", "vs_4_0", &vsBuffer);
+
+	if (vsResult == false)
+	{
+		MessageBox(0, "Error loading vertex shader!", "Compile Error", MB_OK);
+		return false;
+	}
+
+	if (psResult == false)
+	{
+		MessageBox(0, "Error loading pixel shader!", "Compile Error", MB_OK);
+		return false;
+	}
+
+	//	Shaders into objects
+	HRESULT d3dVsResult = _device->CreateVertexShader(vsBuffer->GetBufferPointer(), vsBuffer->GetBufferSize(), 0, &_vertexShader);
+	HRESULT d3dPsResult = _device->CreatePixelShader(psBuffer->GetBufferPointer(), psBuffer->GetBufferSize(), 0, &_pixelShader);
+
+	if (FAILED(d3dVsResult))
+	{
+		if (vsBuffer)
+			vsBuffer->Release();
+		return false;
+	}
+	if (FAILED(d3dPsResult))
+	{
+		if (psBuffer)
+			psBuffer->Release();
+		return false;
+	}
+
+	D3D11_INPUT_ELEMENT_DESC inputLayout[] =
+	{
+		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"COLOUR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+	};
+
+	unsigned int totalLayoutElements = ARRAYSIZE(inputLayout);
+
+	HRESULT d3dLayResult = _device->CreateInputLayout(
+		inputLayout,
+		totalLayoutElements,
+		vsBuffer->GetBufferPointer(),
+		vsBuffer->GetBufferSize(),
+		&_inputLayout);
+	
+	if (FAILED(d3dLayResult))
+	{
+		return false;
+	}
+}
+
+bool DirX::InitGraphics()
+{
+	Vertex vertices[] =
+	{
+		XMFLOAT3(0.0f, 0.5f, 1.0f),
+		XMFLOAT3(0.5f, -0.5f, 1.0f),
+		XMFLOAT3(-0.5f, -0.5f, 1.0f)
+	};
+}
+
+bool DirX::LoadContent()
+{
+	InitPipeline();
+	InitGraphics();
+
+	/*ID3DBlob* vsBuffer = 0;
 
 	bool compileResult = CompileShader("shader.fx", "VS_Main", "vs_4_0", &vsBuffer);
 
@@ -210,13 +278,13 @@ bool DirX::LoadContent()
 	if (FAILED(d3dResult))
 	{
 		return false;
-	}
+	}*/
 	
 	VertexPos vertices[] =
 	{
-		XMFLOAT3(0.5f, 0.5f, 0.5f),
-		XMFLOAT3(0.5f, -0.5f, 0.5f),
-		XMFLOAT3(-0.5f, -0.5f, 0.5f)
+		XMFLOAT3(0.0f, 0.5f, 1.0f),
+		XMFLOAT3(0.5f, -0.5f, 1.0f),
+		XMFLOAT3(-0.5f, -0.5f, 1.0f)
 	};
 
 	D3D11_BUFFER_DESC vertexDesc;
@@ -241,16 +309,15 @@ bool DirX::LoadContent()
 
 void DirX::UnloadContent()
 {
-
 	if (_vertexShader) _vertexShader->Release();
 	if (_pixelShader) _pixelShader->Release();
 	if (_inputLayout) _inputLayout->Release();
 	if (_vertexBuffer) _vertexBuffer->Release();
 
-	_vertexShader = 0;
-	_pixelShader = 0;
-	_inputLayout = 0;
-	_vertexBuffer = 0;
+	if (_swapChain) _swapChain->Release();
+	if (_backBufferTarget) _backBufferTarget->Release();
+	if (_device) _device->Release();
+	if (_context) _context->Release();
 }
 
 void DirX::Update(float dt)
@@ -294,7 +361,7 @@ void DirX::Render()
 
 	_context->ClearRenderTargetView(_backBufferTarget, _bufferColour);
 
-	unsigned int stride = sizeof(VertexPos);
+	unsigned int stride = sizeof(Vertex);
 	unsigned int offset = 0;
 	_context->IASetInputLayout(_inputLayout);
 	_context->IASetVertexBuffers(0, 1, &_vertexBuffer, &stride, &offset);
